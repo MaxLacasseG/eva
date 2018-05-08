@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>eVa - Module d'évaluation des cours</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <link rel="stylesheet" href="ressources/css/bootstrap.min.css">
+        <link rel="stylesheet" href="ressources/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="ressources/css/main.css">
+    </head>
+    <body>
+        <div class="container">
+          <div class="modale-spinner">
+              <img src="ressources/img/spinner2.gif" alt="">
+          </div>
+          <div class="toast">Message de notification</div>
+          
+<!-- DÉBUT : Entête et menu -->
+            <div class="entete">
+                <ul class="nav nav-pills pull-right profile">
+                    <li>Vous êtes connecté <span class="utilisateur-nom">Monsieur Untel</span></li>
+                    <li id="btnDeconnexion"><a href="javascript: void(0);">Déconnexion</a></li>
+                </ul>
+                <h3 class="logo"><img src="ressources/img/logo.svg" width="100" alt="eVa"></h3>
+            </div>
+<!-- FIN : Entête et menu -->
+
+<!-- DÉBUT : Page "connexion" -->
+            <div class="principal" id="pageConnexion">
+                <div class="frm_connexion">
+                    <h3>Ouvrir une connexion</h3>
+                    <form id="frmUtilisateur">
+                        <input type="hidden" name="action" value="connecter">
+                        <div class="form-group">
+                            <input class="form-control" placeholder="Code utilisateur" name="code" type="text">
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" placeholder="Mot de passe" name="mdp" type="password" value="">
+                        </div>
+                        <div class="form-group">
+                            <a class="mdp-oublie" href="javascript:void(0);" title="remplissez le champs ci-dessous avant de soumettre et nous vous enverrons les instructions de réinitialisation du mot de passe par courriel.">mot de passe oublié ?</a>
+                            <input class="form-control mdp-oublie-courriel" placeholder="Adresse de courriel" name="courriel" type="text">
+                        </div>
+                        <input type="submit" name="connexion" value="Soumettre" class="btn btn-lg btn-cdm btn-block"/>
+                    </form>
+                    <div class="erreur-connexion"></div>
+                </div>
+            </div>
+<!-- FIN : Page "connexion" -->
+
+<!-- DÉBUT : Page "évaluation"  -->
+            <div class="principal" id="pageEvaluation">
+                <h3>Évaluation des cours de la session Hiver 2017</h3>
+                <!-- Gabarit (template) pour une question d'évaluation -->
+                <article class="question" data-id="[Id de la question]" data-pos="">
+                    <div class="titre-section">Titre de la section</div>
+                    <div class="instructions">Instructions particulières</div>
+                    <div class="texte-question">
+                        <dl>
+                            <dt>Question <span>[numéro de la question]</span></dt>
+                            <dd>
+                                <span class="grand">&ldquo; </span>
+                                <span class="qstTexte">Texte de la question</span>
+                                <span class="grand"> &rdquo;</span>
+                            </dd>
+                        </dl>
+                    </div>
+                </article>
+                <!-- Conteneur des cours à évaluer -->
+                <div id="listeCours">
+                    
+                    <!-- Gabarit (template) pour un cours à évaluer -->
+                    <div class="reponse row template" data-eleve-id="">
+                        <span class="col-xs-6 cours">Titre du cours (nom de l'enseignant)</span>
+                        <span class="zone-reponse">
+                            <span class="col-xs-6 note">
+                                <span class="col-xs-1">1</span>
+                                <span class="col-xs-1">2</span>
+                                <span class="col-xs-1">3</span>
+                                <span class="col-xs-1">4</span>
+                                <span class="col-xs-1">5</span>
+                                <span class="col-xs-1">6</span>
+                            </span>
+                            <span class="commentaire">
+                                <textarea></textarea>
+                            </span>
+                        </span>
+                    </div>
+
+
+                </div>
+                <div class="soumettre btn-question-suivante">Question suivante</div>
+            </div>
+<!-- FIN : Page "évaluation"  -->
+
+<!-- DÉBUT : Page "résultat de évaluations (prof)" -->
+            <div class="principal" id="pageEnseignant">
+                <h3>Résultat des évaluations (prof)</h3>
+                <p>En construction</p>
+            </div>
+<!-- FIN : Page "résultat de évaluations (prof)" -->
+
+<!-- DÉBUT : Page "résultat de évaluations (coordonateur)" -->
+            <div class="principal" id="pageCoordonateur">
+                <div class="menu">
+                    <div class="navbar navbar-inverse coordonateur-menu">
+                      <div class="navbar-inner">
+                        <ul class="nav">
+                          <li class="menu-enseignants actif">Enseignants</li>
+                          <li class="menu-periode-evaluations">Période d'évaluation</li>
+                        </ul>
+                      </div>
+                    </div>
+                </div>
+                <div class="row-fluid">
+                  <div class="span12">
+
+                    <!-- groupe boutons  actifs, inactifs, tous-->
+                    <div class="enseignants-controle clearfix">
+                      <div id="statutEnseignant" class="btn-group offset1 fleft" data-toggle="buttons-radio">
+                        <button class="btn btn-variant active" data-value="1">Actifs</button>
+                        <button class="btn btn-variant" data-value="0">Inactifs</button>
+                        <button class="btn btn-variant" data-value="2">Tous</button>
+                      </div>
+                      <div class="ajouter-nouveau fright">
+                        <a class="btn btn-variant"><i class="icon-plus icon-white"></i> Nouvel enseignant</a>
+                      </div>
+                    </div>
+
+                    <!-- boite dialogue -->
+                    <div class="nouvel-enseignant modale"></div>
+
+                    <ul class="enseignants-entete">
+                      <li class="clearfix">
+                        <div class="fleft">
+                          <span class="ens-id"><span class="badge">id</span></span>
+                          <span class="ens-nom"><span class="badge">nom</span></span>
+                          <span class="ens-courriel"><span class="badge">courriel</span></span>
+                          <span class="ens-type"><span class="badge">type</span></span>
+                          <span class="ens-cours"><span class="badge">cours</span></span>
+                        </div>
+                        <div class="fright">
+                          <span class="btn-statut"></span>
+                          <span class="btn-modifier"></span>
+                        </div>
+                      </li>
+                    </ul>
+
+                    <ul class="liste-articles boite-contenu">
+                      <li class="article-enseignant gabarit">
+                        <div class="ligne-article clearfix">
+                          <div class="fleft">
+                            <span class="ens-id autofill" data-champ="utl_id">12</span>
+                            <span class="ens-nom autofill" data-champ="utl_nom">Camille Semaan</span>
+                            <span class="ens-courriel autofill" data-champ="utl_code">csemaan</span>
+                            <span class="ens-type autofill" data-champ="utl_type">Enseignant</span>
+                            <span class="ens-cours autofill" data-champ="utl_liste_cours">582-243, 582-449, 582-647</span>
+                          </div>
+                          <div class="fright">
+                            <span class="btn-statut" title="Rendre inactif"><i class="glyphicon glyphicon-star"></i></span>
+                            <span class="btn-modifier" title="Modifier la fiche"><i class="glyphicon glyphicon-edit"></i></span>
+                          </div>
+                        </div>
+                        <div class="modifier-enseignant modale"></div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                <!-- gabarit formulaire -->
+                <div class="boite-frm gabarit">
+                  <div class="enseignant-frm">
+                    <div class="boite-titre clearfix">
+                      <h4 class="titre-article span9 fleft">Nouvel enseignant</h4>
+                      <div class="span3 aright">
+                        <button class="btn btn-danger btn-annuler" type="button">Annuler</button>
+                        <button class="btn btn-success btn-sauvegarder" type="button">Sauvegarder</button>
+                      </div>
+                    </div>
+                    <div class="boite-contenu">
+                      <form>
+                        <input type="hidden" id="champ_utl_id" name="utl_id" value="0"/>
+                        <fieldset>
+                          <div class="controls controls-row">
+                            <div class="controls-group col-xs-3">
+                              <label for="champ_utl_nom"><span class="label">NOM</span></label>
+                              <input id="champ_utl_nom" type="text" class="col-xs-12" name="utl_nom" required pattern="[\w-]{2,}" maxlength="25" />
+                            </div>
+                            <div class="controls-group col-xs-6">
+                              <label for="champ_utl_courriel"><span class="label">COURRIEL</span></label>
+                              <input id="champ_utl_courriel" type="email" class="col-xs-12" name="utl_code" required />
+                            </div>
+                            <div class="controls-group col-xs-3">
+                              <label for="champ_utl_type"><span class="label">TYPE</span></label>
+                              <select id="champ_utl_type" class="col-xs-12" name="utl_type" required>
+                                <option value="enseignant">Enseignant</option>
+                                <option value="coordonnateur">Coordonnateur</option>
+                              </select>
+                            </div>
+                          </div>
+                        </fieldset>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+            </div>
+<!-- FIN : Page "résultat de évaluations (coordonateur)" -->
+
+<!-- DÉBUT : Pied de page -->
+            <div class="pdp">
+                <p>Équipe TIM-PW3</p>
+            </div>
+<!-- FIN : Pied de page -->
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="ressources/js/main.js"></script>
+    </body>
+</html>

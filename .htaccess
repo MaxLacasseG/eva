@@ -1,0 +1,14 @@
+# Configurer la réécriture des URL pour cadre MVC
+# httpd.apache.org
+
+# Activer le module rewrite d'Apache
+RewriteEngine On
+
+# Exclure fichiers et répertoires existants
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Définir une règle de réécriture avec RegExp
+# RewriteRule URL-Affichée url-Transformée
+RewriteRule ^(.*)$ index.php?route=$1 [PT,L]
+

@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sql>
+<datatypes db="mysql">
+	<group label="Numeric" color="rgb(238,238,170)">
+	 	<type label="TINYINT" length="0" sql="TINYINT" quote=""/>
+	 	<type label="SMALLINT" length="0" sql="SMALLINT" quote=""/>
+	 	<type label="MEDIUMINT" length="0" sql="MEDIUMINT" quote=""/>
+	 	<type label="INT" length="0" sql="INT" quote=""/>
+		<type label="Integer" length="0" sql="INTEGER" quote=""/>
+		<type label="BIGINT" length="0" sql="BIGINT" quote=""/>
+		<type label="Decimal" length="1" sql="DECIMAL" re="DEC" quote=""/>
+		<type label="Single precision" length="0" sql="FLOAT" quote=""/>
+		<type label="Double precision" length="0" sql="DOUBLE" re="DOUBLE" quote=""/>
+	</group>
+
+	<group label="Character" color="rgb(255,200,200)">
+		<type label="Char" length="1" sql="CHAR" quote="'"/>
+		<type label="Varchar" length="1" sql="VARCHAR" quote="'"/>
+		<type label="Text" length="0" sql="MEDIUMTEXT" re="TEXT" quote="'"/>
+		<type label="Binary" length="1" sql="BINARY" quote="'"/>
+		<type label="Varbinary" length="1" sql="VARBINARY" quote="'"/>
+		<type label="BLOB" length="0" sql="BLOB" re="BLOB" quote="'"/>
+	</group>
+
+	<group label="Date &amp; Time" color="rgb(200,255,200)">
+		<type label="Date" length="0" sql="DATE" quote="'"/>
+		<type label="Time" length="0" sql="TIME" quote="'"/>
+		<type label="Datetime" length="0" sql="DATETIME" quote="'"/>
+		<type label="Year" length="0" sql="YEAR" quote=""/>
+		<type label="Timestamp" length="0" sql="TIMESTAMP" quote="'"/>
+	</group>
+	
+	<group label="Miscellaneous" color="rgb(200,200,255)">
+		<type label="ENUM" length="1" sql="ENUM" quote=""/>
+		<type label="SET" length="1" sql="SET" quote=""/>
+		<type label="Bit" length="0" sql="bit" quote=""/>
+	</group>
+</datatypes><table x="295" y="469" name="utilisateur">
+<row name="utl_id" null="0" autoincrement="1">
+<datatype>MEDIUMINT</datatype>
+<comment>Identifiant généré automatiquement.</comment>
+</row>
+<row name="utl_nom" null="0" autoincrement="0">
+<datatype>VARCHAR(50)</datatype>
+<comment>Nom complet de l'utilisateur.</comment>
+</row>
+<row name="utl_code" null="0" autoincrement="0">
+<datatype>VARCHAR(50)</datatype>
+<comment>Code de l'utilisateur. Pour les étudiants, il s'agit toujours du numéro de dossier. Pour les enseignants, il s'agit de l'adresse de courriel au Collège.</comment>
+</row>
+<row name="utl_mdp" null="0" autoincrement="0">
+<datatype>CHAR(128)</datatype>
+<comment>Le mot de passe encrypté de l'utilisateur. Les mots de passe sont encryptés en SHA512 après l'ajout d'entropie (voir le champs suivant).</comment>
+</row>
+<row name="utl_entropie" null="0" autoincrement="0">
+<datatype>VARCHAR(255)</datatype>
+<comment>Chaîne de caractères aléatoire unique à chaque utilisateur et générée automatiquement pour ajouter de l'entropie aux mots de passe choisis par les utilisateurs.</comment>
+</row>
+<row name="utl_type" null="0" autoincrement="0">
+<datatype>ENUM('etudiant','enseignant','coordonateur')</datatype>
+<default>'etudiant'</default><comment>Type d'utilisateur. Le type détermine les privilèges d'accès au système.</comment>
+</row>
+<row name="utl_date" null="0" autoincrement="0">
+<datatype>DATE</datatype>
+<comment>Date d'ouverture du compte dans le système.</comment>
+</row>
+<row name="utl_connexion" null="0" autoincrement="0">
+<datatype>TINYINT</datatype>
+<default>0</default><comment>Une session est déjà ouverte pour cet utilisateur (1) ou non (0).</comment>
+</row>
+<key type="PRIMARY" name="">
+<part>utl_id</part>
+</key>
+<key type="UNIQUE" name="">
+<part>utl_code</part>
+</key>
+</table>
+<table x="26" y="144" name="cours">
+<row name="crs_id" null="0" autoincrement="1">
+<datatype>TINYINT</datatype>
+<comment>Identifiant généré automatiquement.</comment>
+</row>
+<row name="crs_code" null="0" autoincrement="0">
+<datatype>CHAR(10)</datatype>
+<comment>Code du cours sous la forme 582-XXX-MA.</comment>
+</row>
+<row name="crs_nom" null="0" autoincrement="0">
+<datatype>VARCHAR(50)</datatype>
+<comment>Nom du cours.</comment>
+</row>
+<key type="PRIMARY" name="">
+<part>crs_id</part>
+</key>
+<key type="UNIQUE" name="">
+<part>crs_code</part>
+</key>
+<key type="UNIQUE" name="">
+<part>crs_nom</part>
+</key>
+</table>
+<table x="259" y="66" name="groupe">
+<row name="grp_id" null="0" autoincrement="1">
+<datatype>MEDIUMINT</datatype>
+</row>
+<row name="grp_session" null="0" autoincrement="0">
+<datatype>ENUM('A','H','E')</datatype>
+<comment>Session académique du groupe.</comment>
+</row>
+<row name="grp_annee" null="0" autoincrement="0">
+<datatype>YEAR</datatype>
+<comment>Année académique correspondante.</comment>
+</row>
+<row name="grp_numero" null="0" autoincrement="0">
+<datatype>TINYINT</datatype>
+<comment>Numéro du groupe, sans 0 à gauche.</comment>
+</row>
+<row name="grp_crs_id_ce" null="0" autoincrement="0">
+<datatype>TINYINT</datatype>
+<relation table="cours" row="crs_id" />
+<comment>Identifiant du cours associé à ce groupe.</comment>
+</row>
+<row name="grp_utl_id_ce" null="0" autoincrement="0">
+<datatype>MEDIUMINT</datatype>
+<relation table="utilisateur" row="utl_id" />
+<comment>Identifiant de l'enseignant associé à ce groupe.</comment>
+</row>
+<key type="PRIMARY" name="">
+<part>grp_id</part>
+</key>
+<key type="INDEX" name="">
+<part>grp_utl_id_ce</part>
+</key>
+<key type="INDEX" name="">
+<part>grp_crs_id_ce</part>
+</key>
+<key type="UNIQUE" name="">
+<part>grp_session</part>
+<part>grp_annee</part>
+<part>grp_numero</part>
+<part>grp_crs_id_ce</part>
+</key>
+</table>
+<table x="592" y="219" name="eleve">
+<row name="elv_id" null="0" autoincrement="1">
+<datatype>MEDIUMINT</datatype>
+<comment>Identifiant généré automatiquement.</comment>
+</row>
+<row name="elv_complet" null="0" autoincrement="0">
+<datatype>TINYINT</datatype>
+<default>0</default><comment>Évaluation complétée (1) ou non (0).</comment>
+</row>
+<row name="elv_grp_id_ce" null="0" autoincrement="0">
+<datatype>MEDIUMINT</datatype>
+<relation table="groupe" row="grp_id" />
+<comment>Identifiant du groupe de cours auquel appartient cet élève.</comment>
+</row>
+<row name="elv_utl_id_ce" null="0" autoincrement="0">
+<datatype>MEDIUMINT</datatype>
+<relation table="utilisateur" row="utl_id" />
+<comment>Identifiant de l'utilisateur correspondant à cet élève.</comment>
+</row>
+<key type="PRIMARY" name="">
+<part>elv_id</part>
+</key>
+<key type="INDEX" name="">
+<part>elv_utl_id_ce</part>
+</key>
+<key type="INDEX" name="">
+<part>elv_grp_id_ce</part>
+</key>
+<key type="UNIQUE" name="">
+<part>elv_grp_id_ce</part>
+<part>elv_utl_id_ce</part>
+</key>
+<comment>Élève participant au processus d'évaluation.</comment>
+</table>
+<table x="1503" y="95" name="formulaire">
+<row name="frm_id" null="0" autoincrement="1">
+<datatype>SMALLINT</datatype>
+<comment>Identifiant généré automatiquement.</comment>
+</row>
+<row name="frm_code" null="0" autoincrement="0">
+<datatype>VARCHAR(6)</datatype>
+<comment>Code du programme auquel appartient ce formulaire d'évaluation.</comment>
+</row>
+<row name="frm_nom" null="0" autoincrement="0">
+<datatype>VARCHAR(150)</datatype>
+<comment>Nom du programme auquel appartient ce formulaire.</comment>
+</row>
+<row name="frm_date" null="0" autoincrement="0">
+<datatype>DATE</datatype>
+<comment>Date d'ajout de ce formulaire d'évaluation.</comment>
+</row>
+<row name="frm_actif" null="0" autoincrement="0">
+<datatype>TINYINT</datatype>
+<default>1</default><comment>Ce formulaire est actif (1) ou non (0). Un seul formulaire actif par code de  programme.</comment>
+</row>
+<key type="PRIMARY" name="">
+<part>frm_id</part>
+</key>
+<comment>Questionnaire d'évaluation.</comment>
+</table>
+<table x="1110" y="168" name="question">
+<row name="qst_id" null="0" autoincrement="1">
+<datatype>MEDIUMINT</datatype>
+<comment>Identifiant généré automatiquement.</comment>
+</row>
+<row name="qst_numero" null="0" autoincrement="0">
+<datatype>TINYINT</datatype>
+<comment>Numéro de la question dans la section du formulaire d'évaluation.</comment>
+</row>
+<row name="qst_texte" null="0" autoincrement="0">
+<datatype>VARCHAR(255)</datatype>
+<comment>Texte de la question d'évaluation.</comment>
+</row>
+<row name="qst_type" null="0" autoincrement="0">
+<datatype>ENUM('note','commentaire')</datatype>
+<default>'note'</default></row>
+<row name="qst_sct_id_ce" null="0" autoincrement="0">
+<datatype>SMALLINT</datatype>
+<relation table="section" row="sct_id" />
+<comment>Identifiant de la section à laquelle appartient cette question d'évaluation.</comment>
+</row>
+<key type="PRIMARY" name="">
+<part>qst_id</part>
+</key>
+<key type="INDEX" name="">
+<part>qst_sct_id_ce</part>
+</key>
+<key type="UNIQUE" name="">
+<part>qst_numero</part>
+<part>qst_sct_id_ce</part>
+</key>
+<comment>Question du formulaire d'évaluation.</comment>
+</table>
+<table x="1436" y="336" name="section">
+<row name="sct_id" null="0" autoincrement="1">
+<datatype>SMALLINT</datatype>
+<comment>Identifiant généré automatiquement.</comment>
+</row>
+<row name="sct_numero" null="0" autoincrement="0">
+<datatype>TINYINT</datatype>
+<comment>Numéro de la section dans le formulaire d'évaluation.</comment>
+</row>
+<row name="sct_titre" null="0" autoincrement="0">
+<datatype>VARCHAR(255)</datatype>
+<comment>Titre de la section du formulaire d'évaluation.</comment>
+</row>
+<row name="sct_instructions" null="0" autoincrement="0">
+<datatype>VARCHAR(255)</datatype>
+<comment>Instructions particulières de la section du formulaire d'évaluation.</comment>
+</row>
+<row name="sct_frm_id_ce" null="0" autoincrement="0">
+<datatype>SMALLINT</datatype>
+<relation table="formulaire" row="frm_id" />
+<comment>Identifiant du formulaire auquel appartient la section.</comment>
+</row>
+<key type="PRIMARY" name="">
+<part>sct_id</part>
+</key>
+<key type="INDEX" name="">
+<part>sct_frm_id_ce</part>
+</key>
+<key type="UNIQUE" name="">
+<part>sct_numero</part>
+<part>sct_frm_id_ce</part>
+</key>
+<comment>Section du formulaire d'évaluation.</comment>
+</table>
+<table x="848" y="289" name="reponse">
+<row name="rep_id" null="0" autoincrement="1">
+<datatype>INT</datatype>
+<comment>Identifiant généré automatiquement.</comment>
+</row>
+<row name="rep_note" null="0" autoincrement="0">
+<datatype>TINYINT</datatype>
+<comment>Note associée à cette réponse si la question est de type 'note'.</comment>
+</row>
+<row name="rep_commentaire" null="0" autoincrement="0">
+<datatype>MEDIUMTEXT</datatype>
+<comment>Texte associé à cette réponse si la question est de type 'commentaire'.</comment>
+</row>
+<row name="rep_elv_id_ce" null="0" autoincrement="0">
+<datatype>MEDIUMINT</datatype>
+<relation table="eleve" row="elv_id" />
+<comment>Identifiant de l'élève auquel appartient cette réponse d'évaluation.</comment>
+</row>
+<row name="rep_qst_id_ce" null="0" autoincrement="0">
+<datatype>MEDIUMINT</datatype>
+<relation table="question" row="qst_id" />
+<comment>Identifiant de la question d'évaluation à laquelle correspond cette réponse.</comment>
+</row>
+<key type="PRIMARY" name="">
+<part>rep_id</part>
+</key>
+<key type="INDEX" name="">
+<part>rep_elv_id_ce</part>
+</key>
+<key type="INDEX" name="">
+<part>rep_qst_id_ce</part>
+</key>
+<key type="UNIQUE" name="">
+<part>rep_elv_id_ce</part>
+<part>rep_qst_id_ce</part>
+</key>
+<comment>Réponse à une question du formulaire d'évaluation.</comment>
+</table>
+</sql>
